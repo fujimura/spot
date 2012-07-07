@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0px; padding: 0px }
+      #map { height: 100%; width:100% }
+    </style>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="vendor/jquery.min.js"></script>
+    <script type="text/javascript" src="vendor/underscore-min.js"></script>
+    <script type="text/javascript" src="vendor/backbone.js"></script>
+    <script type="text/javascript" src="vendor/mustache.js"></script>
+    <script type="text/javascript" src="vendor/gmaps.js"></script>
+    <script type="text/javascript" src="namespace.js"></script>
+    <script type="text/javascript" src="models.js"></script>
+    <script type="text/javascript" src="views.js"></script>
+    <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="init.js"></script>
+    <title>DownloadHustler</title>
+  </head>
+  <body>
+    <h1>Hello, {{name}}!</h1>
+    <p>You have {{unread}} unread messages.</p>
+    <div id="spotlist"></div>
+    <div id="map"></div>
