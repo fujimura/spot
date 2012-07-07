@@ -1,5 +1,5 @@
 
-class Sache.SpotListItem extends Backbone.View
+class App.SpotListItem extends Backbone.View
   initialize: (spot) ->
     @spot = spot
     _.bindAll @, 'render'
@@ -11,7 +11,7 @@ class Sache.SpotListItem extends Backbone.View
     $(@el).html Mustache.render(@template, @spot)
     @
 
-class Sache.SpotForm extends Backbone.View
+class App.SpotForm extends Backbone.View
   initialize: (spot) ->
     @spot = spot
     _.bindAll @, 'render'
@@ -33,7 +33,7 @@ class Sache.SpotForm extends Backbone.View
     </form>
     """
   getSpot: ->
-    new Sache.Spot
+    new App.Spot
       lat:  $(@el).find('textarea').attr 'data-lat'
       lng:  $(@el).find('textarea').attr 'data-lng'
       body: $(@el).find('textarea').val()

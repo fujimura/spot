@@ -1,11 +1,11 @@
-class Sache.Map extends GMaps
+class App.Map extends GMaps
 
-class Sache.Spot
+class App.Spot
   constructor: (attr) ->
     @lat = Number attr.lat
     @lng = Number attr.lng
     @body = attr.body || ''
-    @listItem = new Sache.SpotListItem @
+    @listItem = new App.SpotListItem @
     _.bindAll @, 'post'
 
   # FIXME naming
