@@ -1,0 +1,37 @@
+Name:                   spot
+Version:                0.0.0
+Author:                 Fujimura Daisuke
+Maintainer:             Fujimura Daisuke
+-- FIXME
+License:                BSD3
+License-File:           LICENSE
+Synopsis:               Web API for DB
+Description:            Web API for DB
+Category:               Web
+Cabal-Version:          >= 1.6
+Build-Type:             Simple
+Data-Files:             coffee/init.coffee
+                        coffee/models.coffee
+                        coffee/namespace.coffee
+                        coffee/utils.coffee
+                        coffee/views.coffee
+                        views/home.mustache
+Executable spot
+  Main-Is:              Main.hs
+  GHC-Options:          -Wall
+  Build-Depends:        base >= 4.0 && < 5
+                      , hastache
+                      , mtl
+                      , persistent
+                      , persistent-sqlite
+                      , persistent-template
+                      , scotty
+                      , text
+                      , wai-extra
+                      , wai-middleware-static
+  Other-Modules:        DB
+                        Migrate
+
+Source-Repository head
+  Type:                 git
+  Location:             git://github.com/fujimura/spot.git
