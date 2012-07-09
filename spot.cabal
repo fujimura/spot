@@ -20,15 +20,15 @@ Executable spot
   Main-Is:              Main.hs
   GHC-Options:          -Wall
   Build-Depends:        base >= 4.0 && < 5
-                      , persistent-template
-                      , persistent-sqlite
-                      , persistent
-                      , text
-                      , mtl
-                      , scotty
-                      , wai-middleware-static
-                      , wai-extra
                       , hastache
+                      , mtl
+                      , persistent
+                      , persistent-sqlite
+                      , persistent-template
+                      , scotty
+                      , text
+                      , wai-extra
+                      , wai-middleware-static
   Other-Modules:        DB
                         Migrate
 
