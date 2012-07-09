@@ -34,7 +34,7 @@ main :: IO ()
 main = scotty 3000 $ do
     -- Add any WAI middleware, they are run top-down.
     middleware logStdoutDev
-    middleware $ staticRoot "static"
+    middleware $ staticPolicy $ addBase "static"
 
     get "/" $ do
         mustache "views/home.mustache" $ Info "Haskell" 100
