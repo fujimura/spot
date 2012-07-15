@@ -3,6 +3,7 @@
 
 import Control.Applicative ((<$>))
 import Control.Monad.Trans
+import qualified Data.Text as T
 import Data.Text.Lazy.Encoding (decodeUtf8)
 import Data.Data
 import Text.Hastache
@@ -11,7 +12,9 @@ import Network.Wai.Middleware.RequestLogger -- install wai-extra if you don't ha
 import Network.Wai.Middleware.Static
 import Web.Scotty hiding (body)
 import qualified Database.Persist.Sqlite as P
+import Config
 import DB
+
 
 data Info = Info {
     name    :: String
@@ -28,7 +31,12 @@ withRescue :: ActionM () -> ActionM ()
 withRescue = flip rescue text
 
 main :: IO ()
-main = scotty 3000 $ do
+main = do
+    -- #TODO Get environment from command line argument like "-e production"
+    db <- getConfig (T.unpack "config/database.yml") "development" "database"
+    let runDB = (runDB' db) :: (MonadIO m => P.SqlPersist IO a -> m a)
+
+    scotty 3000 $ do
     -- Add any WAI middleware, they are run top-down.
     middleware logStdoutDev
     middleware $ staticPolicy $ addBase "static"

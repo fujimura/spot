@@ -17,8 +17,5 @@ Spot json
     deriving Show
 |]
 
-runDB :: MonadIO m => SqlPersist IO a -> m a
-runDB = runDB' "development.sqlite"
-
 runDB' :: MonadIO m => Text -> SqlPersist IO a -> m a
 runDB' name action = liftIO $ withSqliteConn name $ runSqlConn action
