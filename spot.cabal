@@ -27,9 +27,12 @@ Executable spot
                       , persistent-template
                       , scotty
                       , text
+                      , unordered-containers
                       , wai-extra
                       , wai-middleware-static
-  Other-Modules:        DB
+                      , yaml
+  Other-Modules:        App
+                        DB
                         Migrate
 
 Source-Repository head
