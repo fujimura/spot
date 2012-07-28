@@ -6,15 +6,18 @@ import Network.Wai.Middleware.RequestLogger -- install wai-extra if you don't ha
 import Network.Wai.Middleware.Static
 import Web.Scotty hiding (body)
 import Config
+import qualified Option
 import App
 
 main :: IO ()
 main = do
-    db <- getConfig (T.unpack "config/database.yml") "development" "database"
+    port        <- Option.port
+    environment <- Option.environment
+    database    <- getConfig (T.unpack "config/database.yml") environment "database"
 
-    scotty 3000 $ do
+    scotty port $ do
       -- Add any WAI middleware, they are run top-down.
       middleware logStdoutDev
       middleware $ staticPolicy $ addBase "static"
 
-      app db
+      app database

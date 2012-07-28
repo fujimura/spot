@@ -20,6 +20,7 @@ Executable spot
   Main-Is:              Main.hs
   GHC-Options:          -Wall
   Build-Depends:        base >= 4.0 && < 5
+                      , cmdargs
                       , hastache
                       , mtl
                       , persistent
@@ -34,6 +35,7 @@ Executable spot
   Other-Modules:        App
                         DB
                         Migrate
+                        Option
 
 Source-Repository head
   Type:                 git
