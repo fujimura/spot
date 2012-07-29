@@ -1,5 +1,5 @@
 (function() {
 
-  window.Sache = {};
+  window.App = {};
 
 }).call(this);

@@ -2,7 +2,7 @@
   var __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
-  Sache.SpotListItem = (function(_super) {
+  App.SpotListItem = (function(_super) {
 
     __extends(SpotListItem, _super);
 
@@ -26,7 +26,7 @@
 
   })(Backbone.View);
 
-  Sache.SpotForm = (function(_super) {
+  App.SpotForm = (function(_super) {
 
     __extends(SpotForm, _super);
 
@@ -58,7 +58,7 @@
     SpotForm.prototype.template = "<form>\n  <textarea data-lat={{lat}} data-lng={{lng}}>{{body}}</textarea>\n  <input type='submit'>\n</form>";
 
     SpotForm.prototype.getSpot = function() {
-      return new Sache.Spot({
+      return new App.Spot({
         lat: $(this.el).find('textarea').attr('data-lat'),
         lng: $(this.el).find('textarea').attr('data-lng'),
         body: $(this.el).find('textarea').val()

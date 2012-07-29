@@ -4,14 +4,14 @@
   init = function() {
     var map,
       _this = this;
-    map = new Sache.Map({
+    map = new App.Map({
       div: "#map",
       lat: util.getParams("lat") || 35.65980,
       lng: util.getParams("lng") || 139.69518,
       disableDoubleClickZoom: true,
       dblclick: function(e) {
         var spot;
-        spot = new Sache.Spot({
+        spot = new App.Spot({
           lat: e.latLng.lat(),
           lng: e.latLng.lng()
         });
@@ -20,7 +20,7 @@
           lng: spot.lng,
           title: "New marker",
           infoWindow: {
-            content: (new Sache.SpotForm(spot)).render().el
+            content: (new App.SpotForm(spot)).render().el
           }
         });
       }
@@ -28,7 +28,7 @@
     this.spots = [];
     $.getJSON('/spots', function(data) {
       _.map(data, function(d) {
-        return _this.spots.push(new Sache.Spot(d));
+        return _this.spots.push(new App.Spot(d));
       });
       return _.each(_this.spots, function(s) {
         $('#spotlist').append(s.listItem.render().el);
@@ -49,7 +49,7 @@
           name: "add_marker",
           action: function(e) {
             var spot;
-            spot = new Sache.Spot({
+            spot = new App.Spot({
               lat: e.latLng.lat(),
               lng: e.latLng.lng()
             });
@@ -58,7 +58,7 @@
               lng: spot.lng,
               title: "New marker",
               infoWindow: {
-                content: (new Sache.SpotForm(spot)).render().el
+                content: (new App.SpotForm(spot)).render().el
               }
             });
           }
