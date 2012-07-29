@@ -6,8 +6,32 @@
 
     __extends(Map, _super);
 
-    function Map() {
-      Map.__super__.constructor.apply(this, arguments);
+    function Map(args) {
+      Map.__super__.constructor.call(this, args);
+      this.setContextMenu({
+        control: "map",
+        options: [
+          {
+            title: "Add marker",
+            name: "add_marker",
+            action: function(e) {
+              var spot;
+              spot = new App.Spot({
+                lat: e.latLng.lat(),
+                lng: e.latLng.lng()
+              });
+              return this.addMarker({
+                lat: spot.lat,
+                lng: spot.lng,
+                title: "New marker",
+                infoWindow: {
+                  content: (new App.SpotForm(spot)).render().el
+                }
+              });
+            }
+          }
+        ]
+      });
     }
 
     return Map;

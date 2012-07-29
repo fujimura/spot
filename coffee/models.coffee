@@ -1,4 +1,22 @@
 class App.Map extends GMaps
+  constructor: (args) ->
+    super(args)
+    @setContextMenu
+      control: "map"
+      options: [
+        title: "Add marker"
+        name: "add_marker"
+        action: (e) ->
+          spot = new App.Spot
+            lat: e.latLng.lat()
+            lng: e.latLng.lng()
+          @addMarker
+            lat: spot.lat
+            lng: spot.lng
+            title: "New marker"
+            infoWindow:
+              content: (new App.SpotForm spot).render().el
+       ]
 
 class App.Spot
   constructor: (attr) ->

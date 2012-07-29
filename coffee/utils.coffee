@@ -11,4 +11,3 @@ util.getParams = (key) =>
   params = {}
   paramsInArray.forEach (p) -> params[p[0]] = p[1]
   params[key]
-

@@ -2,9 +2,8 @@
   var init;
 
   init = function() {
-    var map,
-      _this = this;
-    map = new App.Map({
+    var _this = this;
+    new App.Map({
       div: "#map",
       lat: util.getParams("lat") || 35.65980,
       lng: util.getParams("lng") || 139.69518,
@@ -15,7 +14,7 @@
           lat: e.latLng.lat(),
           lng: e.latLng.lng()
         });
-        return map.addMarker({
+        return this.addMarker({
           lat: spot.lat,
           lng: spot.lng,
           title: "New marker",
@@ -26,7 +25,7 @@
       }
     });
     this.spots = [];
-    $.getJSON('/spots', function(data) {
+    return $.getJSON('/spots', function(data) {
       _.map(data, function(d) {
         return _this.spots.push(new App.Spot(d));
       });
@@ -40,30 +39,6 @@
           }
         });
       });
-    });
-    return map.setContextMenu({
-      control: "map",
-      options: [
-        {
-          title: "Add marker",
-          name: "add_marker",
-          action: function(e) {
-            var spot;
-            spot = new App.Spot({
-              lat: e.latLng.lat(),
-              lng: e.latLng.lng()
-            });
-            return this.addMarker({
-              lat: spot.lat,
-              lng: spot.lng,
-              title: "New marker",
-              infoWindow: {
-                content: (new App.SpotForm(spot)).render().el
-              }
-            });
-          }
-        }
-      ]
     });
   };
 

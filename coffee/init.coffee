@@ -1,5 +1,5 @@
 init = ->
-  map = new App.Map
+  new App.Map
     div: "#map"
     lat: (util.getParams("lat") or 35.65980)
     lng: (util.getParams("lng") or 139.69518)
@@ -8,7 +8,7 @@ init = ->
       spot = new App.Spot
         lat: e.latLng.lat()
         lng: e.latLng.lng()
-      map.addMarker
+      @addMarker
         lat: spot.lat
         lng: spot.lng
         title: "New marker"
@@ -25,22 +25,5 @@ init = ->
         lng   : s.lng
         infoWindow:
           content: s.body
-
-  map.setContextMenu
-    control: "map"
-    options: [
-      title: "Add marker"
-      name: "add_marker"
-      action: (e) ->
-        spot = new App.Spot
-          lat: e.latLng.lat()
-          lng: e.latLng.lng()
-        @addMarker
-          lat: spot.lat
-          lng: spot.lng
-          title: "New marker"
-          infoWindow:
-            content: (new App.SpotForm spot).render().el
-     ]
 
 $(init)
