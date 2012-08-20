@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings, ExtendedDefaultRules #-}
 
-import Test.Hspec.Monadic
-import qualified Spec.Spot
+import Test.Hspec
+import qualified Spot
 
+main :: IO ()
 main = hspec $ do
-  Spec.Spot.spec
+  Spot.spec
