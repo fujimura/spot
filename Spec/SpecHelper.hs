@@ -10,6 +10,7 @@ module Spec.SpecHelper
   , initReq
   , runTestDB
   , testDB
+  , migrate
   ) where
 
 import Control.Monad.Trans as X
@@ -74,6 +75,9 @@ testDB = "db/test.sqlite3"
 
 runTestDB :: P.SqlPersist IO a -> IO a
 runTestDB = DB.runDB' testDB
+
+migrate :: IO ()
+migrate = liftIO $ runTestDB $ P.runMigration DB.migrateAll
 
 getApp :: IO Wai.Application
 getApp = liftIO $ do

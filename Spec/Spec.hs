@@ -2,7 +2,10 @@
 
 import Test.Hspec
 import qualified Spec.Spot
+import Spec.SpecHelper (migrate)
 
 main :: IO ()
-main = hspec $ do
-  Spec.Spot.spec
+main = do
+  migrate
+  hspec $ do
+    Spec.Spot.spec
