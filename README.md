@@ -1,4 +1,4 @@
-# SPOT
+# SPOT [<img src="https://secure.travis-ci.org/fujimura/spot.png"/>](http://travis-ci.org/fujimura/spot)
 
 ## What is this?
 Map with text
