@@ -20,15 +20,20 @@ Executable spot
   Main-Is:              Main.hs
   GHC-Options:          -Wall
   Build-Depends:        base >= 4.0 && < 5
+                      , bytestring
                       , cmdargs
                       , hastache
+                      , http-types
                       , mtl
+                      , network
                       , persistent
                       , persistent-sqlite
                       , persistent-template
                       , scotty
                       , text
                       , unordered-containers
+                      , utf8-string
+                      , wai
                       , wai-extra
                       , wai-middleware-static
                       , yaml

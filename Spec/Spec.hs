@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings, ExtendedDefaultRules #-}
 
 import Test.Hspec
-import qualified Spot
+import qualified Spec.Spot
 
 main :: IO ()
 main = hspec $ do
-  Spot.spec
+  Spec.Spot.spec
