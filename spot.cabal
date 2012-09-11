@@ -29,7 +29,7 @@ Executable spot
                       , persistent
                       , persistent-sqlite
                       , persistent-template
-                      , scotty
+                      , scotty >= 0.4.5
                       , text
                       , unordered-containers
                       , utf8-string
