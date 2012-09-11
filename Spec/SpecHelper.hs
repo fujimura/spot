@@ -8,8 +8,6 @@ module Spec.SpecHelper
   , getApp
   , getBody
   , initReq
-  , runTestDB
-  , testDB
   , migrate
   ) where
 
@@ -70,18 +68,12 @@ get app path =
 				, Wai.vault          = mempty
 			}
 
-testDB :: Text
-testDB = "db/test.sqlite3"
+migrate :: P.ConnectionPool -> IO ()
+migrate p = liftIO $ DB.runDB p $ P.runMigration DB.migrateAll
 
-runTestDB :: P.SqlPersist IO a -> IO a
-runTestDB = DB.runDB' testDB
-
-migrate :: IO ()
-migrate = liftIO $ runTestDB $ P.runMigration DB.migrateAll
-
-getApp :: IO Wai.Application
-getApp = liftIO $ do
-  Scotty.scottyApp $ App.app testDB
+getApp :: P.ConnectionPool -> IO Wai.Application
+getApp p = liftIO $ do
+  Scotty.scottyApp $ App.app p
 
 getBody :: WaiTest.SResponse -> BS.ByteString
 getBody res = BS.concat . LBS.toChunks $ WaiTest.simpleBody res

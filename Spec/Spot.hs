@@ -9,27 +9,26 @@ import qualified Database.Persist.Sqlite as P
 import qualified Network.Wai.Test        as WaiTest
 import DB
 
-spec :: Spec
-spec = do
+spec :: P.ConnectionPool -> Spec
+spec p = do
   let withData = bracket_ setup teardown
            where
              setup =
-               runTestDB $ P.insert $ Spot 1.2 1.3 "ABCDE"
+               runDB p $ P.insert $ Spot 1.2 1.3 "ABCDE"
              teardown =
-               runTestDB $ P.deleteWhere ([] :: [P.Filter Spot])
+               runDB p $ P.deleteWhere ([] :: [P.Filter Spot])
 
-  describe "GET /" $
+  describe "GET /" $ do
     it "should contains 'haskell' in response body" $ do
-      app <- getApp
+      app <- getApp p
       res <- WaiTest.runSession (WaiTest.request initReq) app
       "Haskell" `BS.isInfixOf` (getBody res) `shouldBe` True
 
   describe "GET /spots" $
     it "should contains 'ABCDE' in response body" $ do
       withData $ do
-        app <- getApp
+        app <- getApp p
         res <- app `get` "/spots"
-        liftIO $ print $ (getBody res)
         "ABCDE" `BS.isInfixOf` (getBody res) `shouldBe` True
 
 main = spec

@@ -29,20 +29,20 @@ withRescue :: ActionM () -> ActionM ()
 -- TODO Return proper status code
 withRescue = flip rescue text
 
-app :: T.Text -> ScottyM ()
-app db = do
+app :: P.ConnectionPool -> ScottyM ()
+app p = do
     -- #TODO Get environment from command line argument like "-e production"
-    let runDB = runDB' db
+    let db = runDB p
 
     get "/" $
         mustache "views/home.mustache" $ Info "Haskell" 100
 
     get "/spots" $ withRescue $ do
-        spots <- runDB $ map P.entityVal <$> P.selectList ([] :: [P.Filter Spot]) []
+        spots <- db $ map P.entityVal <$> P.selectList ([] :: [P.Filter Spot]) []
         json spots
 
     post "/spots" $ withRescue $ do
         spotData <- jsonData :: ActionM Spot
-        spotId <- runDB $ P.insert spotData
-        spot <- runDB $ P.get spotId
+        spotId <- db $ P.insert spotData
+        spot <- db $ P.get spotId
         json spot
