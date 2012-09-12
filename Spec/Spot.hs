@@ -2,7 +2,7 @@
 
 module Spec.Spot ( spec ) where
 
-import Spec.SpecHelper
+import Spec.Helper
 import qualified Data.ByteString         as BS
 import qualified Data.ByteString.Lazy    as LBS
 import qualified Database.Persist.Sqlite as P

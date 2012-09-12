@@ -3,7 +3,7 @@
 import qualified Database.Persist.Sqlite as P
 import Test.Hspec
 import qualified Spec.Spot
-import Spec.SpecHelper (migrate)
+import Spec.Helper (migrate)
 
 main :: IO ()
 main = do

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Spec.SpecHelper
+module Spec.Helper
   (
     module X
   , bracket_
