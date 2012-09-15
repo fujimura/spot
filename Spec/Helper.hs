@@ -34,21 +34,21 @@ import qualified App
 
 get app path =
   WaiTest.runSession (WaiTest.request req) app
-			where req = Wai.Request {
-					Wai.requestMethod  = HT.methodGet
-				, Wai.httpVersion    = HT.http11
-				, Wai.rawPathInfo    = path
-				, Wai.rawQueryString = ""
-				, Wai.serverName     = "localhost"
-				, Wai.serverPort     = 80
-				, Wai.requestHeaders = []
-				, Wai.isSecure       = False
-				, Wai.remoteHost     = Sock.SockAddrInet (Sock.PortNum 80) 100
-				, Wai.pathInfo       = filter (/="") $ T.split (== '/') $ TE.decodeUtf8 path
-				, Wai.queryString    = []
-				, Wai.requestBody    = mempty
-				, Wai.vault          = mempty
-			}
+      where req = Wai.Request {
+          Wai.requestMethod  = HT.methodGet
+        , Wai.httpVersion    = HT.http11
+        , Wai.rawPathInfo    = path
+        , Wai.rawQueryString = ""
+        , Wai.serverName     = "localhost"
+        , Wai.serverPort     = 80
+        , Wai.requestHeaders = []
+        , Wai.isSecure       = False
+        , Wai.remoteHost     = Sock.SockAddrInet (Sock.PortNum 80) 100
+        , Wai.pathInfo       = filter (/="") $ T.split (== '/') $ TE.decodeUtf8 path
+        , Wai.queryString    = []
+        , Wai.requestBody    = mempty
+        , Wai.vault          = mempty
+      }
 
 migrate :: P.ConnectionPool -> IO ()
 migrate p = liftIO $ DB.runDB p $ P.runMigration DB.migrateAll
