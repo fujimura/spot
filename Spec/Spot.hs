@@ -21,7 +21,8 @@ spec p = do
   describe "GET /" $ do
     it "should contains 'haskell' in response body" $ do
       app <- getApp p
-      res <- WaiTest.runSession (WaiTest.request initReq) app
+      res <- app `get` "/"
+      liftIO $ print (getBody res)
       "Haskell" `BS.isInfixOf` (getBody res) `shouldBe` True
 
   describe "GET /spots" $
