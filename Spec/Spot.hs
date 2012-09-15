@@ -23,13 +23,13 @@ spec p = do
       app <- getApp p
       res <- app `get` "/"
       liftIO $ print (getBody res)
-      "Haskell" `BS.isInfixOf` (getBody res) `shouldBe` True
+      getBody res `shouldContains` "Haskell"
 
   describe "GET /spots" $
     it "should contains 'ABCDE' in response body" $ do
       withData $ do
         app <- getApp p
         res <- app `get` "/spots"
-        "ABCDE" `BS.isInfixOf` (getBody res) `shouldBe` True
+        getBody res `shouldContains` "ABCDE"
 
 main = spec

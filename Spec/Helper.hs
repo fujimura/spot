@@ -8,6 +8,7 @@ module Spec.Helper
   , getApp
   , getBody
   , migrate
+  , shouldContains
   ) where
 
 import Control.Monad.Trans as X
@@ -58,3 +59,9 @@ getApp p = liftIO $ Scotty.scottyApp $ App.app p
 
 getBody :: WaiTest.SResponse -> BS.ByteString
 getBody res = BS.concat . LBS.toChunks $ WaiTest.simpleBody res
+
+should :: Show a => (a -> a -> Bool) -> a -> a -> Expectation
+should be actual expected = actual `be` expected `shouldBe` True
+
+shouldContains :: BS.ByteString -> BS.ByteString -> Expectation
+shouldContains subject matcher = should BS.isInfixOf matcher subject
