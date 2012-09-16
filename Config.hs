@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Config
-    ( getConfig
+    ( get
     ) where
 
 import Control.Applicative
@@ -17,8 +17,8 @@ import qualified Data.HashMap.Strict as M
 -}
 
 
-getConfig :: FilePath -> Text -> Text -> IO Text
-getConfig path env configName = do
+get :: FilePath -> Text -> Text -> IO Text
+get path env configName = do
     file <- decodeFile path
     allConfigs <- maybe (fail "Invalid YAML file") return file
     configs <- getObject env allConfigs
