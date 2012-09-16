@@ -18,18 +18,16 @@ spec p = do
              teardown =
                runDB p $ P.deleteWhere ([] :: [P.Filter Spot])
 
-  describe "GET /" $ do
+  describe "GET /" $
     it "should contains 'haskell' in response body" $ do
       app <- getApp p
       res <- app `get` "/"
-      liftIO $ print (getBody res)
       getBody res `shouldContains` "Haskell"
 
   describe "GET /spots" $
-    it "should contains 'ABCDE' in response body" $ do
-      withData $ do
-        app <- getApp p
-        res <- app `get` "/spots"
-        getBody res `shouldContains` "ABCDE"
+    it "should contains 'ABCDE' in response body" $ withData $ do
+      app <- getApp p
+      res <- app `get` "/spots"
+      getBody res `shouldContains` "ABCDE"
 
 main = spec
