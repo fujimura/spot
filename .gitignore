@@ -1,4 +1,12 @@
+dist
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+
 db/*.sqlite3
 config/database.yml
-dist/*
-cabal-dev/
+.hsenv*
+dist*
+
