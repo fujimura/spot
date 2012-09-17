@@ -5,6 +5,7 @@ module Spec.Spot ( spec ) where
 import Spec.Helper
 import qualified Data.ByteString         as BS
 import qualified Data.ByteString.Lazy    as LBS
+import qualified Data.Aeson              as AE
 import qualified Database.Persist.Sqlite as P
 import qualified Network.Wai.Test        as WaiTest
 import DB
@@ -29,5 +30,14 @@ spec p = do
       app <- getApp p
       res <- app `get` "/spots"
       getBody res `shouldContains` "ABCDE"
+
+  describe "POST /spots" $
+    it "should create new Spot record" $ do
+      let spot = Spot 1.2 1.3 "ABCDE"
+      app    <- getApp p
+      before <- runDB p $ P.count ([] :: [P.Filter Spot])
+      res    <- post app "/spots" $ AE.encode spot
+      after  <- runDB p $ P.count ([] :: [P.Filter Spot])
+      before < after `shouldBe` True
 
 main = spec

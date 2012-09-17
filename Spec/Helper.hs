@@ -5,6 +5,7 @@ module Spec.Helper
     module X
   , bracket_
   , get
+  , post
   , getApp
   , getBody
   , migrate
@@ -22,6 +23,8 @@ import qualified Data.Text                as T
 import qualified Data.Text.Encoding       as TE
 import qualified Data.ByteString          as BS
 import qualified Data.ByteString.Lazy     as LBS
+import qualified Data.Aeson               as AE
+import qualified Data.Conduit.List        as CL
 import qualified Codec.Binary.UTF8.String as CBUS
 import qualified Network.Wai              as Wai
 import qualified Network.Wai.Test         as WaiTest
@@ -33,10 +36,30 @@ import qualified Web.Scotty               as Scotty
 import qualified DB
 import qualified App
 
+get :: Wai.Application -> BS.ByteString -> IO WaiTest.SResponse
 get app path =
   WaiTest.runSession (WaiTest.request req) app
       where req = Wai.Request {
           Wai.requestMethod  = HT.methodGet
+        , Wai.httpVersion    = HT.http11
+        , Wai.rawPathInfo    = path
+        , Wai.rawQueryString = ""
+        , Wai.serverName     = "localhost"
+        , Wai.serverPort     = 80
+        , Wai.requestHeaders = []
+        , Wai.isSecure       = False
+        , Wai.remoteHost     = Sock.SockAddrInet (Sock.PortNum 80) 100
+        , Wai.pathInfo       = filter (/="") $ T.split (== '/') $ TE.decodeUtf8 path
+        , Wai.queryString    = []
+        , Wai.requestBody    = mempty
+        , Wai.vault          = mempty
+      }
+
+post :: Wai.Application -> BS.ByteString -> LBS.ByteString -> IO WaiTest.SResponse
+post app path body =
+  WaiTest.runSession (WaiTest.srequest (WaiTest.SRequest req body)) app
+      where req = Wai.Request {
+          Wai.requestMethod  = HT.methodPost
         , Wai.httpVersion    = HT.http11
         , Wai.rawPathInfo    = path
         , Wai.rawQueryString = ""
