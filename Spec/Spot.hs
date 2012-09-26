@@ -7,7 +7,6 @@ import qualified Data.ByteString         as BS
 import qualified Data.ByteString.Lazy    as LBS
 import qualified Data.Aeson              as AE
 import qualified Database.Persist.Sqlite as P
-import qualified Network.Wai.Test        as WaiTest
 import DB
 
 spec :: P.ConnectionPool -> Spec

@@ -4,7 +4,7 @@
 module DB where
 
 import Control.Monad.Trans
-import Data.Text (Text)
+import Data.Text ()
 import Database.Persist
 import Database.Persist.Sqlite
 import Database.Persist.TH
