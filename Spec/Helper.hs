@@ -26,8 +26,8 @@ import qualified Data.ByteString.Lazy     as LBS
 import qualified Data.Aeson               as AE
 import qualified Data.Conduit.List        as CL
 import qualified Codec.Binary.UTF8.String as CBUS
-import qualified Network.Wai              as Wai
-import qualified Network.Wai.Test         as WaiTest
+import qualified Network.Wai              as W
+import qualified Network.Wai.Test         as WT
 import qualified Network.Socket.Internal  as Sock
 import qualified Network.HTTP.Types       as HT
 import qualified Database.Persist.Sqlite  as P
@@ -36,26 +36,26 @@ import qualified Web.Scotty               as Scotty
 import qualified DB
 import qualified App
 
-get :: Wai.Application -> BS.ByteString -> IO WaiTest.SResponse
+get :: W.Application -> BS.ByteString -> IO WT.SResponse
 get app path =
-  WaiTest.runSession (WaiTest.srequest (WaiTest.SRequest req "")) app
-      where req = WaiTest.setRawPathInfo WaiTest.defaultRequest path
+  WT.runSession (WT.srequest (WT.SRequest req "")) app
+      where req = WT.setRawPathInfo WT.defaultRequest path
 
-post :: Wai.Application -> BS.ByteString -> LBS.ByteString -> IO WaiTest.SResponse
+post :: W.Application -> BS.ByteString -> LBS.ByteString -> IO WT.SResponse
 post app path body =
-  WaiTest.runSession (WaiTest.srequest (WaiTest.SRequest req body)) app
-      where req = flip WaiTest.setRawPathInfo path WaiTest.defaultRequest {
-          Wai.requestMethod  = HT.methodPost
+  WT.runSession (WT.srequest (WT.SRequest req body)) app
+      where req = flip WT.setRawPathInfo path WT.defaultRequest {
+          W.requestMethod  = HT.methodPost
       }
 
 migrate :: P.ConnectionPool -> IO ()
 migrate p = liftIO $ DB.runDB p $ P.runMigration DB.migrateAll
 
-getApp :: P.ConnectionPool -> IO Wai.Application
+getApp :: P.ConnectionPool -> IO W.Application
 getApp p = liftIO $ Scotty.scottyApp $ App.app p
 
-getBody :: WaiTest.SResponse -> BS.ByteString
-getBody res = BS.concat . LBS.toChunks $ WaiTest.simpleBody res
+getBody :: WT.SResponse -> BS.ByteString
+getBody res = BS.concat . LBS.toChunks $ WT.simpleBody res
 
 should :: Show a => (a -> a -> Bool) -> a -> a -> Expectation
 should be actual expected = actual `be` expected `shouldBe` True
