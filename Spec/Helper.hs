@@ -38,41 +38,14 @@ import qualified App
 
 get :: Wai.Application -> BS.ByteString -> IO WaiTest.SResponse
 get app path =
-  -- TODO use SRequest to keep consistency with 'post'
-  WaiTest.runSession (WaiTest.request req) app
-      where req = Wai.Request {
-          Wai.requestMethod  = HT.methodGet
-        , Wai.httpVersion    = HT.http11
-        , Wai.rawPathInfo    = path
-        , Wai.rawQueryString = ""
-        , Wai.serverName     = "localhost"
-        , Wai.serverPort     = 80
-        , Wai.requestHeaders = []
-        , Wai.isSecure       = False
-        , Wai.remoteHost     = Sock.SockAddrInet (Sock.PortNum 80) 100
-        , Wai.pathInfo       = filter (/="") $ T.split (== '/') $ TE.decodeUtf8 path
-        , Wai.queryString    = []
-        , Wai.requestBody    = mempty
-        , Wai.vault          = mempty
-      }
+  WaiTest.runSession (WaiTest.srequest (WaiTest.SRequest req "")) app
+      where req = WaiTest.setRawPathInfo WaiTest.defaultRequest path
 
 post :: Wai.Application -> BS.ByteString -> LBS.ByteString -> IO WaiTest.SResponse
 post app path body =
   WaiTest.runSession (WaiTest.srequest (WaiTest.SRequest req body)) app
-      where req = Wai.Request {
+      where req = flip WaiTest.setRawPathInfo path WaiTest.defaultRequest {
           Wai.requestMethod  = HT.methodPost
-        , Wai.httpVersion    = HT.http11
-        , Wai.rawPathInfo    = path
-        , Wai.rawQueryString = ""
-        , Wai.serverName     = "localhost"
-        , Wai.serverPort     = 80
-        , Wai.requestHeaders = []
-        , Wai.isSecure       = False
-        , Wai.remoteHost     = Sock.SockAddrInet (Sock.PortNum 80) 100
-        , Wai.pathInfo       = filter (/="") $ T.split (== '/') $ TE.decodeUtf8 path
-        , Wai.queryString    = []
-        , Wai.requestBody    = mempty
-        , Wai.vault          = mempty
       }
 
 migrate :: P.ConnectionPool -> IO ()

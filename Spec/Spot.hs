@@ -21,13 +21,13 @@ spec p = do
   describe "GET /" $
     it "should contains 'haskell' in response body" $ do
       app <- getApp p
-      res <- app `get` "/"
+      res <- app `get` ""
       getBody res `shouldContains` "Haskell"
 
   describe "GET /spots" $
     it "should contains 'ABCDE' in response body" $ withData $ do
       app <- getApp p
-      res <- app `get` "/spots"
+      res <- app `get` "spots"
       getBody res `shouldContains` "ABCDE"
 
   describe "POST /spots" $
@@ -35,7 +35,7 @@ spec p = do
       let spot = Spot 1.2 1.3 "ABCDE"
       app    <- getApp p
       before <- runDB p $ P.count ([] :: [P.Filter Spot])
-      res    <- post app "/spots" $ AE.encode spot
+      res    <- post app "spots" $ AE.encode spot
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before < after `shouldBe` True
 
