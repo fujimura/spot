@@ -38,6 +38,7 @@ import qualified App
 
 get :: Wai.Application -> BS.ByteString -> IO WaiTest.SResponse
 get app path =
+  -- TODO use SRequest to keep consistency with 'post'
   WaiTest.runSession (WaiTest.request req) app
       where req = Wai.Request {
           Wai.requestMethod  = HT.methodGet
