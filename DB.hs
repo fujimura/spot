@@ -17,5 +17,10 @@ Spot json
     deriving Show
 |]
 
+-- TODO refactor
+toUpdateQuery spot = [ SpotLat  =. (spotLat spot)
+                     , SpotLng  =. (spotLng spot)
+                     , SpotBody =. (spotBody spot) ]
+
 runDB :: MonadIO m => ConnectionPool -> SqlPersist IO a -> m a
 runDB p action = liftIO $ runSqlPool action p

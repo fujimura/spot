@@ -41,6 +41,13 @@ app p = do
         spots <- db $ map P.entityVal <$> P.selectList ([] :: [P.Filter Spot]) []
         json spots
 
+    put "/spots/:id" $ withRescue $ do
+        spotId' <- param "id"
+        spotData <- jsonData :: ActionM Spot
+        let spotId = (read spotId' :: SpotId)
+        spot <- db $ P.updateGet spotId $ toUpdateQuery spotData
+        json spot
+
     post "/spots" $ withRescue $ do
         spotData <- jsonData :: ActionM Spot
         spotId <- db $ P.insert spotData

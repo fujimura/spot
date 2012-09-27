@@ -6,10 +6,12 @@ module Spec.Helper
   , bracket_
   , get
   , post
+  , put
   , getApp
   , getBody
   , migrate
   , shouldContains
+  , shouldEqual
   ) where
 
 import Control.Monad.Trans as X
@@ -48,6 +50,13 @@ post app path body =
           W.requestMethod  = HT.methodPost
       }
 
+put :: W.Application -> BS.ByteString -> LBS.ByteString -> IO WT.SResponse
+put app path body =
+  WT.runSession (WT.srequest (WT.SRequest req body)) app
+      where req = flip WT.setRawPathInfo path WT.defaultRequest {
+          W.requestMethod  = HT.methodPut
+      }
+
 migrate :: P.ConnectionPool -> IO ()
 migrate p = liftIO $ DB.runDB p $ P.runMigration DB.migrateAll
 
@@ -62,3 +71,6 @@ should be actual expected = actual `be` expected `shouldBe` True
 
 shouldContains :: BS.ByteString -> BS.ByteString -> Expectation
 shouldContains subject matcher = should BS.isInfixOf matcher subject
+
+shouldEqual :: (Show a, Eq a) => a -> a -> Expectation
+shouldEqual = should (==)
