@@ -7,6 +7,7 @@ module Spec.Helper
   , get
   , post
   , put
+  , delete
   , getApp
   , getBody
   , migrate
@@ -55,6 +56,13 @@ put app path body =
   WT.runSession (WT.srequest (WT.SRequest req body)) app
       where req = flip WT.setRawPathInfo path WT.defaultRequest {
           W.requestMethod  = HT.methodPut
+      }
+
+delete :: W.Application -> BS.ByteString -> IO WT.SResponse
+delete app path =
+  WT.runSession (WT.srequest (WT.SRequest req "")) app
+      where req = flip WT.setRawPathInfo path WT.defaultRequest {
+          W.requestMethod  = HT.methodDelete
       }
 
 migrate :: P.ConnectionPool -> IO ()

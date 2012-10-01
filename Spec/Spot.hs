@@ -51,4 +51,13 @@ spec p = do
           Just s -> (spotBody s) `shouldEqual` "BAR"
           Nothing -> error "Failed to create Spot record"
 
+  describe "DELETE /spots/:id" $
+    it "should delete existing record" $ do
+      spotId <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
+      app    <- getApp p
+      before <- runDB p $ P.count ([] :: [P.Filter Spot])
+      _      <- delete app (BS.concat ["spots/", (BSC8.pack $ show spotId)])
+      after  <- runDB p $ P.count ([] :: [P.Filter Spot])
+      before - after `shouldBe` 1
+
 main = spec

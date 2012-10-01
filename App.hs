@@ -7,6 +7,7 @@ module App
 import Control.Applicative ((<$>))
 import Control.Monad.Trans
 import Data.Text ()
+import qualified Data.ByteString         as BS
 import Data.Text.Lazy.Encoding (decodeUtf8)
 import Data.Data
 import Text.Hastache
@@ -44,6 +45,7 @@ app p = do
     put "/spots/:id" $ withRescue $ do
         spotId' <- param "id"
         spotData <- jsonData :: ActionM Spot
+        -- TODO use lambda
         let spotId = (read spotId' :: SpotId)
         spot <- db $ P.updateGet spotId $ toUpdateQuery spotData
         json spot
@@ -53,3 +55,10 @@ app p = do
         spotId <- db $ P.insert spotData
         spot <- db $ P.get spotId
         json spot
+
+    delete "/spots/:id" $ withRescue $ do
+        spotId' <- param "id"
+        let spotId = (read spotId' :: SpotId)
+        _ <- db $ P.delete spotId
+        --FIXME What is the best return value of delete request?
+        json ("Deleted" :: BS.ByteString)
