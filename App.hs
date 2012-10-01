@@ -43,10 +43,8 @@ app p = do
         json spots
 
     put "/spots/:id" $ withRescue $ do
-        spotId' <- param "id"
+        spotId <- (\x -> read x :: SpotId) <$> param "id"
         spotData <- jsonData :: ActionM Spot
-        -- TODO use lambda
-        let spotId = (read spotId' :: SpotId)
         spot <- db $ P.updateGet spotId $ toUpdateQuery spotData
         json spot
 
@@ -57,8 +55,7 @@ app p = do
         json spot
 
     delete "/spots/:id" $ withRescue $ do
-        spotId' <- param "id"
-        let spotId = (read spotId' :: SpotId)
+        spotId <- (\x -> read x :: SpotId) <$> param "id"
         _ <- db $ P.delete spotId
         --FIXME What is the best return value of delete request?
         json ("Deleted" :: BS.ByteString)
