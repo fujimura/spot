@@ -3,13 +3,14 @@
 
 import qualified Database.Persist.Sqlite as P
 import           Spec.Helper             (migrate)
-import qualified Spec.Spot
+import qualified Spec.App
+import qualified Spec.Api
 import           Test.Hspec
 
 main :: IO ()
 main = do
-  -- TODO DRY up with Main.hs
   pool <- P.createSqlitePool ":memory:" 3
   migrate pool
   hspec $ do
-    Spec.Spot.spec pool
+    Spec.App.spec pool
+    Spec.Api.spec pool

@@ -1,7 +1,7 @@
 {-# LANGUAGE ExtendedDefaultRules #-}
 {-# LANGUAGE OverloadedStrings    #-}
 
-module Spec.Spot ( spec ) where
+module Spec.Api ( spec ) where
 
 import qualified Data.Aeson              as AE
 import qualified Data.ByteString         as BS
@@ -20,12 +20,6 @@ spec p = do
                runDB p $ P.insert $ Spot 1.2 1.3 "ABCDE"
              teardown =
                runDB p $ P.deleteWhere ([] :: [P.Filter Spot])
-
-  describe "GET /" $
-    it "should contains 'haskell' in response body" $ do
-      app <- getApp p
-      res <- app `get` ""
-      getBody res `shouldContains` "Haskell"
 
   describe "GET /spots" $
     it "should contains 'ABCDE' in response body" $ withData $ do

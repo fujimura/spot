@@ -37,6 +37,7 @@ import qualified Network.Wai.Test         as WT
 import qualified Web.Scotty               as Scotty
 
 import qualified App
+import qualified Api
 import qualified DB
 
 get :: W.Application -> BS.ByteString -> IO WT.SResponse
@@ -69,7 +70,9 @@ migrate :: P.ConnectionPool -> IO ()
 migrate p = liftIO $ DB.runDB p $ P.runMigration DB.migrateAll
 
 getApp :: P.ConnectionPool -> IO W.Application
-getApp p = liftIO $ Scotty.scottyApp $ App.app p
+getApp p = liftIO $ Scotty.scottyApp $ do
+              App.app
+              Api.app p
 
 getBody :: WT.SResponse -> BS.ByteString
 getBody res = BS.concat . LBS.toChunks $ WT.simpleBody res

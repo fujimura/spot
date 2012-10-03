@@ -4,6 +4,7 @@
 {-# LANGUAGE TypeSynonymInstances #-}
 
 import qualified App
+import qualified Api
 import qualified Config
 import qualified Data.Text                            as T
 import qualified Database.Persist.Sqlite              as P
@@ -23,4 +24,5 @@ main = do
       middleware logStdoutDev
       middleware $ staticPolicy $ addBase "static"
 
-      App.app pool
+      App.app
+      Api.app pool
