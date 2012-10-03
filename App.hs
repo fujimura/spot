@@ -1,24 +1,26 @@
-{-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
-{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+{-# LANGUAGE DeriveDataTypeable   #-}
+{-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE OverloadedStrings    #-}
+{-# LANGUAGE TypeSynonymInstances #-}
 module App
     ( app
     ) where
 
-import Control.Applicative ((<$>))
-import Control.Monad.Trans
-import Data.Text ()
+import           Control.Applicative     ((<$>))
+import           Control.Monad.Trans
 import qualified Data.ByteString         as BS
-import Data.Text.Lazy.Encoding (decodeUtf8)
-import Data.Data
-import Text.Hastache
-import Text.Hastache.Context
-import Web.Scotty hiding (body)
+import           Data.Data
+import           Data.Text ()
+import           Data.Text.Lazy.Encoding (decodeUtf8)
 import qualified Database.Persist.Sqlite as P
-import DB
+import           DB
+import           Text.Hastache
+import           Text.Hastache.Context
+import           Web.Scotty              hiding (body)
 
 data Info = Info {
-    name    :: String
-  , unread  :: Int
+    name   :: String
+  , unread :: Int
   } deriving (Data, Typeable)
 
 mustache :: (Data a, Typeable a) => FilePath -> a -> ActionM ()

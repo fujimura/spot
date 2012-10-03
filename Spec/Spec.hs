@@ -1,9 +1,10 @@
-{-# LANGUAGE OverloadedStrings, ExtendedDefaultRules #-}
+{-# LANGUAGE ExtendedDefaultRules #-}
+{-# LANGUAGE OverloadedStrings    #-}
 
 import qualified Database.Persist.Sqlite as P
-import Test.Hspec
+import           Spec.Helper             (migrate)
 import qualified Spec.Spot
-import Spec.Helper (migrate)
+import           Test.Hspec
 
 main :: IO ()
 main = do

@@ -1,13 +1,19 @@
-{-# LANGUAGE QuasiQuotes, TemplateHaskell, TypeSynonymInstances #-}
-{-# LANGUAGE FlexibleInstances, TypeFamilies, OverloadedStrings #-}
-{-# LANGUAGE GADTs, FlexibleContexts, EmptyDataDecls #-}
+{-# LANGUAGE EmptyDataDecls       #-}
+{-# LANGUAGE FlexibleContexts     #-}
+{-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE GADTs                #-}
+{-# LANGUAGE OverloadedStrings    #-}
+{-# LANGUAGE QuasiQuotes          #-}
+{-# LANGUAGE TemplateHaskell      #-}
+{-# LANGUAGE TypeFamilies         #-}
+{-# LANGUAGE TypeSynonymInstances #-}
 module DB where
 
-import Control.Monad.Trans
-import Data.Text ()
-import Database.Persist
-import Database.Persist.Sqlite
-import Database.Persist.TH
+import           Control.Monad.Trans
+import           Data.Text
+import           Database.Persist
+import           Database.Persist.Sqlite
+import           Database.Persist.TH
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persist|
 Spot json

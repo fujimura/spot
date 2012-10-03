@@ -1,14 +1,16 @@
-{-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
-{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+{-# LANGUAGE DeriveDataTypeable   #-}
+{-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE OverloadedStrings    #-}
+{-# LANGUAGE TypeSynonymInstances #-}
 
-import Network.Wai.Middleware.RequestLogger
-import Network.Wai.Middleware.Static
-import Web.Scotty hiding (body)
-import qualified Data.Text               as T
-import qualified Database.Persist.Sqlite as P
-import qualified Config
-import qualified Option
 import qualified App
+import qualified Config
+import qualified Data.Text                            as T
+import qualified Database.Persist.Sqlite              as P
+import           Network.Wai.Middleware.RequestLogger
+import           Network.Wai.Middleware.Static
+import qualified Option
+import           Web.Scotty                           hiding (body)
 
 main :: IO ()
 main = do

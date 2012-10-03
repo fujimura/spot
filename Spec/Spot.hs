@@ -1,15 +1,16 @@
-{-# LANGUAGE OverloadedStrings, ExtendedDefaultRules #-}
+{-# LANGUAGE ExtendedDefaultRules #-}
+{-# LANGUAGE OverloadedStrings    #-}
 
 module Spec.Spot ( spec ) where
 
-import Spec.Helper
+import qualified Data.Aeson              as AE
 import qualified Data.ByteString         as BS
 import qualified Data.ByteString.Char8   as BSC8
 import qualified Data.ByteString.Lazy    as LBS
-import qualified Data.Aeson              as AE
 import qualified Database.Persist.Sqlite as P
-import DB
-import System.IO
+import           DB
+import           Spec.Helper
+import           System.IO
 
 spec :: P.ConnectionPool -> Spec
 spec p = do

@@ -1,15 +1,16 @@
-{-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE OverloadedStrings  #-}
 
 module Option
     ( port
     , environment
     ) where
 
-import Control.Applicative
-import qualified Data.Text as T
-import System.Console.CmdArgs
+import           Control.Applicative
+import qualified Data.Text              as T
+import           System.Console.CmdArgs
 
-data Options = Options { port' :: String
+data Options = Options { port'        :: String
                        , environment' :: String }
               deriving (Show, Data, Typeable)
 

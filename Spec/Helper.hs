@@ -15,29 +15,29 @@ module Spec.Helper
   , shouldEqual
   ) where
 
-import Control.Monad.Trans as X
-import Control.Applicative as X
-import Test.Hspec          as X
+import           Control.Applicative      as X
+import           Control.Monad.Trans      as X
+import           Test.Hspec               as X
 
-import Control.Exception (bracket_)
-import Data.Monoid (mempty)
+import           Control.Exception        (bracket_)
+import           Data.Monoid              (mempty)
 
-import qualified Data.Text                as T
-import qualified Data.Text.Encoding       as TE
+import qualified Codec.Binary.UTF8.String as CBUS
+import qualified Data.Aeson               as AE
 import qualified Data.ByteString          as BS
 import qualified Data.ByteString.Lazy     as LBS
-import qualified Data.Aeson               as AE
 import qualified Data.Conduit.List        as CL
-import qualified Codec.Binary.UTF8.String as CBUS
+import qualified Data.Text                as T
+import qualified Data.Text.Encoding       as TE
+import qualified Database.Persist.Sqlite  as P
+import qualified Network.HTTP.Types       as HT
+import qualified Network.Socket.Internal  as Sock
 import qualified Network.Wai              as W
 import qualified Network.Wai.Test         as WT
-import qualified Network.Socket.Internal  as Sock
-import qualified Network.HTTP.Types       as HT
-import qualified Database.Persist.Sqlite  as P
 import qualified Web.Scotty               as Scotty
 
-import qualified DB
 import qualified App
+import qualified DB
 
 get :: W.Application -> BS.ByteString -> IO WT.SResponse
 get app path =

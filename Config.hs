@@ -4,11 +4,11 @@ module Config
     ( get
     ) where
 
-import Control.Applicative
-import Data.Text
-import Data.Yaml
-import Data.Maybe (fromMaybe)
+import           Control.Applicative
 import qualified Data.HashMap.Strict as M
+import           Data.Maybe          (fromMaybe)
+import           Data.Text
+import           Data.Yaml
 
 {-
   most code is taken from Yesod's configuration handling.
