@@ -34,7 +34,6 @@ withRescue = flip rescue text
 
 app :: P.ConnectionPool -> ScottyM ()
 app p = do
-    -- #TODO Get environment from command line argument like "-e production"
     let db = runDB p
 
     get "/" $
@@ -64,5 +63,4 @@ app p = do
     delete "/spots/:id" $ withRescue $ do
         key <- param "id"
         _   <- db $ P.delete (read key :: SpotId)
-        --FIXME What is the best return value of delete request?
-        json ("Deleted" :: BS.ByteString)
+        json True
