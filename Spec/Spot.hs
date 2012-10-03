@@ -32,6 +32,14 @@ spec p = do
       res <- app `get` "spots"
       getBody res `shouldContains` "ABCDE"
 
+  describe "GET /spots/:id" $
+    it "should get record" $ do
+      k <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
+      spot <- runDB p $ P.get k
+      app    <- getApp p
+      res    <- get app (BS.concat ["spots/", (BSC8.pack $ show k)])
+      (BS.concat . LBS.toChunks $ AE.encode spot) `shouldEqual` (getBody res)
+
   describe "POST /spots" $
     it "should create new Spot record" $ do
       let spot = Spot 1.2 1.3 "ABCDE"
