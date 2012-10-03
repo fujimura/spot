@@ -1,20 +1,20 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import Control.Monad
-import Control.Exception
-import qualified Data.Text as T
-import System.Directory(doesDirectoryExist)
-import Database.Persist.Sqlite
+import           Control.Exception
+import           Control.Monad
+import qualified Data.Text               as T
+import           Database.Persist.Sqlite
+import           System.Directory        (doesDirectoryExist)
 
-import Config
-import DB
+import qualified Config
+import qualified Database.Persist.Sqlite as P
+import           DB
 
 main :: IO ()
 main = do
     d <- doesDirectoryExist "db"
     unless d $ fail "Directory ./db does not exist. Retry after creating ./db"
 
-    development <- getConfig (T.unpack "config/database.yml") "development" "database"
-    test        <- getConfig (T.unpack "config/database.yml") "test" "database"
-    runDB' development $ runMigration migrateAll
-    runDB' test $ runMigration migrateAll
+    development <- Config.get (T.unpack "config/database.yml") "development" "database"
+    pool <- P.createSqlitePool development 3
+    runDB pool $ runMigration migrateAll
