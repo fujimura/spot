@@ -41,28 +41,28 @@ app p = do
         mustache "views/home.mustache" $ Info "Haskell" 100
 
     get "/spots" $ withRescue $ do
-        spots <- db $ map P.entityVal <$> P.selectList ([] :: [P.Filter Spot]) []
-        json spots
+        resources <- db $ map P.entityVal <$> P.selectList ([] :: [P.Filter Spot]) []
+        json resources
 
     get "/spots/:id" $ withRescue $ do
-        spotId <-  param "id"
-        spot   <- db $ P.get (read spotId :: SpotId)
-        json spot
+        key      <- param "id"
+        resource <- db $ P.get (read key :: SpotId)
+        json resource
 
     put "/spots/:id" $ withRescue $ do
-        spotId   <-  param "id"
-        spotData <- jsonData :: ActionM Spot
-        spot <- db $ P.updateGet (read spotId :: SpotId) $ toUpdateQuery spotData
-        json spot
+        key      <- param "id"
+        value    <- jsonData :: ActionM Spot
+        resource <- db $ P.updateGet (read key :: SpotId) $ toUpdateQuery value
+        json resource
 
     post "/spots" $ withRescue $ do
-        spotData <- jsonData :: ActionM Spot
-        spotId <- db $ P.insert spotData
-        spot <- db $ P.get spotId
-        json spot
+        value    <- jsonData :: ActionM Spot
+        key      <- db $ P.insert value
+        resource <- db $ P.get key
+        json resource
 
     delete "/spots/:id" $ withRescue $ do
-        spotId <- param "id"
-        _ <- db $ P.delete (read spotId :: SpotId)
+        key <- param "id"
+        _   <- db $ P.delete (read key :: SpotId)
         --FIXME What is the best return value of delete request?
         json ("Deleted" :: BS.ByteString)

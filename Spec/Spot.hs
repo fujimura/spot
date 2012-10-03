@@ -35,37 +35,37 @@ spec p = do
 
   describe "GET /spots/:id" $
     it "should get record" $ do
-      k <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
-      spot <- runDB p $ P.get k
-      app    <- getApp p
-      res    <- get app (BS.concat ["spots/", (BSC8.pack $ show k)])
-      (BS.concat . LBS.toChunks $ AE.encode spot) `shouldEqual` (getBody res)
+      key      <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
+      resource <- runDB p $ P.get key
+      app      <- getApp p
+      response <- get app (BS.concat ["spots/", (BSC8.pack $ show key)])
+      (BS.concat . LBS.toChunks $ AE.encode resource) `shouldEqual` (getBody response)
 
   describe "POST /spots" $
     it "should create new Spot record" $ do
-      let spot = Spot 1.2 1.3 "ABCDE"
+      let resource = Spot 1.2 1.3 "ABCDE"
       app    <- getApp p
       before <- runDB p $ P.count ([] :: [P.Filter Spot])
-      res    <- post app "spots" $ AE.encode spot
+      res    <- post app "spots" $ AE.encode resource
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before < after `shouldBe` True
 
   describe "PUT /spots/:id" $
     it "should update existing record" $ do
-      spotId <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
+      resourceId <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
       app    <- getApp p
-      _      <- put app (BS.concat ["spots/", (BSC8.pack $ show spotId)]) $ AE.encode (Spot 1.2 1.3 "BAR")
-      spot   <- runDB p $ P.get spotId
-      case spot of
+      _      <- put app (BS.concat ["spots/", (BSC8.pack $ show resourceId)]) $ AE.encode (Spot 1.2 1.3 "BAR")
+      resource   <- runDB p $ P.get resourceId
+      case resource of
           Just s -> (spotBody s) `shouldEqual` "BAR"
           Nothing -> error "Failed to create Spot record"
 
   describe "DELETE /spots/:id" $
     it "should delete existing record" $ do
-      spotId <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
+      resourceId <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
       app    <- getApp p
       before <- runDB p $ P.count ([] :: [P.Filter Spot])
-      _      <- delete app (BS.concat ["spots/", (BSC8.pack $ show spotId)])
+      _      <- delete app (BS.concat ["spots/", (BSC8.pack $ show resourceId)])
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before - after `shouldBe` 1
 
