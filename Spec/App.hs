@@ -13,5 +13,3 @@ spec p = do
       app <- getApp p
       res <- app `get` ""
       getBody res `shouldContains` "Haskell"
-
-main = spec

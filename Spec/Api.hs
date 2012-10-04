@@ -52,12 +52,10 @@ spec p = do
           Nothing -> error "Failed to create Spot record"
 
   describe "DELETE /spots/:id" $
-    it "should delete existing record" $ do
+    it "should delete existing record" $ cleanup $ do
       resourceId <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
       app    <- getApp p
       before <- runDB p $ P.count ([] :: [P.Filter Spot])
       _      <- delete app (BS.concat ["spots/", (BSC8.pack $ show resourceId)])
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before - after `shouldBe` 1
-
-main = spec
