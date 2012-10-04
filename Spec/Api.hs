@@ -43,19 +43,19 @@ spec p = do
 
   describe "PUT /spots/:id" $
     it "should update existing record" $ cleanup $ do
-      resourceId <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
-      app    <- getApp p
-      _      <- put app (BS.concat ["spots/", (BSC8.pack $ show resourceId)]) $ AE.encode (Spot 1.2 1.3 "BAR")
-      resource   <- runDB p $ P.get resourceId
+      key <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
+      app <- getApp p
+      _   <- put app (BS.concat ["spots/", (BSC8.pack $ show key)]) $ AE.encode (Spot 1.2 1.3 "BAR")
+      resource   <- runDB p $ P.get key
       case resource of
           Just s -> (spotBody s) `shouldEqual` "BAR"
           Nothing -> error "Failed to create Spot record"
 
   describe "DELETE /spots/:id" $
     it "should delete existing record" $ cleanup $ do
-      resourceId <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
+      key    <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
       app    <- getApp p
       before <- runDB p $ P.count ([] :: [P.Filter Spot])
-      _      <- delete app (BS.concat ["spots/", (BSC8.pack $ show resourceId)])
+      _      <- delete app (BS.concat ["spots/", (BSC8.pack $ show key)])
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before - after `shouldBe` 1
