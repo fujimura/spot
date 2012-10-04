@@ -10,6 +10,7 @@ module Spec.Helper
   , delete
   , getApp
   , getBody
+  , getStatus
   , migrate
   , shouldContains
   , shouldEqual
@@ -34,10 +35,11 @@ import qualified Network.HTTP.Types       as HT
 import qualified Network.Socket.Internal  as Sock
 import qualified Network.Wai              as W
 import qualified Network.Wai.Test         as WT
+import           Web.PathPieces
 import qualified Web.Scotty               as Scotty
 
-import qualified App
 import qualified Api
+import qualified App
 import qualified DB
 
 get :: W.Application -> BS.ByteString -> IO WT.SResponse
@@ -76,6 +78,9 @@ getApp p = liftIO $ Scotty.scottyApp $ do
 
 getBody :: WT.SResponse -> BS.ByteString
 getBody res = BS.concat . LBS.toChunks $ WT.simpleBody res
+
+getStatus :: WT.SResponse -> Int
+getStatus = HT.statusCode . WT.simpleStatus
 
 should :: Show a => (a -> a -> Bool) -> a -> a -> Expectation
 should be actual expected = actual `be` expected `shouldBe` True

@@ -8,29 +8,36 @@ import qualified Data.Aeson              as AE
 import qualified Data.ByteString         as BS
 import qualified Data.ByteString.Char8   as BSC8
 import qualified Data.ByteString.Lazy    as LBS
+import           Data.Text.Encoding
 import qualified Database.Persist.Sqlite as P
 import           DB
+import           Helper
 import           Spec.Helper
-import           System.IO
+import           Web.PathPieces
 
 spec :: P.ConnectionPool -> Spec
 spec p = do
   let cleanup = finally $ runDB p $ P.deleteWhere ([] :: [P.Filter Spot])
 
-  describe "GET /spots" $
+  describe "GET /spots" $ do
     it "should contains 'ABCDE' in response body" $ cleanup $ do
       runDB p $ P.insert $ Spot 1.2 1.3 "ABCDE"
       app <- getApp p
       res <- app `get` "spots"
       getBody res `shouldContains` "ABCDE"
 
-  describe "GET /spots/:id" $
+  describe "GET /spots/:id" $ do
     it "should get record" $ cleanup $ do
       key      <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
       resource <- runDB p $ P.get key
       app      <- getApp p
-      response <- get app (BS.concat ["spots/", (BSC8.pack $ show key)])
+      response <- get app (BS.concat ["spots/", (encodeUtf8 $ toPathPiece key)])
       (BS.concat . LBS.toChunks $ AE.encode resource) `shouldEqual` (getBody response)
+
+    it "should return 404 if resource is not found" $ cleanup $ do
+      app      <- getApp p
+      response <- get app "spots/1023"
+      (getStatus response) `shouldEqual` 404
 
   describe "POST /spots" $
     it "should create new Spot record" $ cleanup $ do
@@ -41,21 +48,33 @@ spec p = do
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before < after `shouldBe` True
 
-  describe "PUT /spots/:id" $
+  describe "PUT /spots/:id" $ do
     it "should update existing record" $ cleanup $ do
       key <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
       app <- getApp p
-      _   <- put app (BS.concat ["spots/", (BSC8.pack $ show key)]) $ AE.encode (Spot 1.2 1.3 "BAR")
+      _   <- put app (BS.concat ["spots/", (encodeUtf8 $ toPathPiece key)]) $ AE.encode (Spot 1.2 1.3 "BAR")
       resource   <- runDB p $ P.get key
       case resource of
           Just s -> (spotBody s) `shouldEqual` "BAR"
           Nothing -> error "Failed to create Spot record"
 
-  describe "DELETE /spots/:id" $
+    it "should return 404 if resource is not found" $ cleanup $ do
+      _ <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
+      app <- getApp p
+      response <- put app "spots/8392" $ AE.encode (Spot 1.2 1.3 "BAR")
+      (getStatus response) `shouldEqual` 404
+
+  describe "DELETE /spots/:id" $ do
     it "should delete existing record" $ cleanup $ do
       key    <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
       app    <- getApp p
       before <- runDB p $ P.count ([] :: [P.Filter Spot])
-      _      <- delete app (BS.concat ["spots/", (BSC8.pack $ show key)])
+      _      <- delete app (BS.concat ["spots/", (encodeUtf8 $ toPathPiece key)])
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before - after `shouldBe` 1
+
+    it "should return 404 if resource is not found" $ cleanup $ do
+      _ <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
+      app <- getApp p
+      response <- delete app "spots/300000"
+      (getStatus response) `shouldEqual` 404

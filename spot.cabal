@@ -27,6 +27,7 @@ Executable spot
                       , http-types
                       , mtl
                       , network
+                      , path-pieces
                       , persistent
                       , persistent-sqlite
                       , persistent-template
@@ -39,6 +40,7 @@ Executable spot
                       , wai-middleware-static
                       , yaml
   Other-Modules:        App
+                        Helper
                         DB
                         Migrate
                         Option

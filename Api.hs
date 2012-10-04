@@ -1,17 +1,17 @@
-{-# LANGUAGE OverloadedStrings    #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Api
     ( app
     ) where
 
 import           Control.Applicative     ((<$>))
-import           Data.Text ()
+import           Control.Monad           (when)
+import           Data.Maybe              (isNothing)
+import           Data.Text               ()
 import qualified Database.Persist.Sqlite as P
 import           DB
+import           Helper
+import qualified Network.HTTP.Types      as HT
 import           Web.Scotty              hiding (body)
-
-withRescue :: ActionM () -> ActionM ()
--- TODO Return proper status code
-withRescue = flip rescue text
 
 app :: P.ConnectionPool -> ScottyM ()
 app p = do
@@ -21,16 +21,23 @@ app p = do
         resources <- db $ map P.entityVal <$> P.selectList ([] :: [P.Filter Spot]) []
         json resources
 
-    get "/spots/:id" $ withRescue $ do
-        key      <- param "id"
-        resource <- db $ P.get (read key :: SpotId)
-        json resource
+    get "/spots/:id" $ do
+        key      <- toKey <$> param "id"
+        resource <-  db $ P.get key :: ActionM (Maybe Spot)
+        case resource of
+            Just r  -> json $ r
+            Nothing -> status HT.status404
 
     put "/spots/:id" $ withRescue $ do
-        key      <- param "id"
+        key      <- toKey <$> param "id"
+        resource <- db $ P.get key :: ActionM (Maybe Spot)
+        when (isNothing resource) (status HT.status404)
         value    <- jsonData
-        resource <- db $ P.updateGet (read key :: SpotId) $ toUpdateQuery (value :: Spot)
-        json resource
+        db $ P.update key $ toUpdateQuery (value :: Spot)
+        resource' <- db $ P.get key :: ActionM (Maybe Spot)
+        case resource' of
+            Just r  -> json $ r
+            Nothing -> status HT.status404
 
     post "/spots" $ withRescue $ do
         value    <- jsonData
@@ -39,6 +46,8 @@ app p = do
         json resource
 
     delete "/spots/:id" $ withRescue $ do
-        key <- param "id"
-        _   <- db $ P.delete (read key :: SpotId)
+        key <- toKey <$> param "id"
+        resource <- db $ P.get key :: ActionM (Maybe Spot)
+        when (isNothing resource) (status HT.status404)
+        _   <- db $ P.delete (key :: SpotId)
         json True
