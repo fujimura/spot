@@ -28,13 +28,13 @@ app p = do
 
     put "/spots/:id" $ withRescue $ do
         key      <- param "id"
-        value    <- jsonData :: ActionM Spot
-        resource <- db $ P.updateGet (read key :: SpotId) $ toUpdateQuery value
+        value    <- jsonData
+        resource <- db $ P.updateGet (read key :: SpotId) $ toUpdateQuery (value :: Spot)
         json resource
 
     post "/spots" $ withRescue $ do
-        value    <- jsonData :: ActionM Spot
-        key      <- db $ P.insert value
+        value    <- jsonData
+        key      <- db $ P.insert (value :: Spot)
         resource <- db $ P.get key
         json resource
 
