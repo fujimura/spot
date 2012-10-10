@@ -23,7 +23,7 @@ app p = do
 
     get "/spots/:id" $ do
         key      <- toKey <$> param "id"
-        resource <-  db $ P.get key :: ActionM (Maybe Spot)
+        resource <- db $ P.get (key :: SpotId)
         case resource of
             Just r  -> json $ r
             Nothing -> status HT.status404
@@ -32,7 +32,7 @@ app p = do
         key      <- toKey <$> param "id"
         value    <- jsonData
         db $ P.update key $ toUpdateQuery (value :: Spot)
-        resource <- db $ P.get key :: ActionM (Maybe Spot)
+        resource <- db $ P.get (key :: SpotId)
         case resource of
             Just r  -> json $ r
             Nothing -> status HT.status404
@@ -45,7 +45,7 @@ app p = do
 
     delete "/spots/:id" $ withRescue $ do
         key <- toKey <$> param "id"
-        resource <- db $ P.get key :: ActionM (Maybe Spot)
+        resource <- db $ P.get (key :: SpotId)
         when (isNothing resource) (status HT.status404)
         _   <- db $ P.delete (key :: SpotId)
         json True
