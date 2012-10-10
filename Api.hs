@@ -30,12 +30,10 @@ app p = do
 
     put "/spots/:id" $ withRescue $ do
         key      <- toKey <$> param "id"
-        resource <- db $ P.get key :: ActionM (Maybe Spot)
-        when (isNothing resource) (status HT.status404)
         value    <- jsonData
         db $ P.update key $ toUpdateQuery (value :: Spot)
-        resource' <- db $ P.get key :: ActionM (Maybe Spot)
-        case resource' of
+        resource <- db $ P.get key :: ActionM (Maybe Spot)
+        case resource of
             Just r  -> json $ r
             Nothing -> status HT.status404
 
