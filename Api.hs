@@ -5,13 +5,14 @@ module Api
 
 import           Control.Applicative     ((<$>))
 import           Control.Monad           (when)
+import qualified Data.Aeson              as AE
 import           Data.Maybe              (isNothing)
 import           Data.Text               ()
 import qualified Database.Persist.Sqlite as P
 import           DB
 import           Helper
 import qualified Network.HTTP.Types      as HT
-import           Web.Scotty              hiding (body)
+import           Web.Scotty
 
 app :: P.ConnectionPool -> ScottyM ()
 app p = do
@@ -38,10 +39,13 @@ app p = do
             Nothing -> status HT.status404
 
     post "/spots" $ withRescue $ do
-        value    <- jsonData
-        key      <- db $ P.insert (value :: Spot)
-        resource <- db $ P.get key
-        json resource
+        value    <- AE.decode <$> body
+        case value of
+            Just v -> do
+              key      <- db $ P.insert (fromJust value :: Spot)
+              resource <- db $ P.get key
+              json resource
+            Nothing -> status HT.status400
 
     delete "/spots/:id" $ withRescue $ do
         key <- toKey <$> param "id"

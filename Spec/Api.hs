@@ -40,7 +40,7 @@ spec p = do
       response <- get app "spots/1023"
       (getStatus response) `shouldEqual` 404
 
-  describe "POST /spots" $
+  describe "POST /spots" $ do
     it "should create new Spot record" $ cleanup $ do
       let resource = Spot 1.2 1.3 "ABCDE"
       app    <- getApp p
@@ -48,6 +48,12 @@ spec p = do
       res    <- post app "spots" $ AE.encode resource
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before < after `shouldBe` True
+
+    describe "with invalid JSON" $ do
+      it "should return 400" $ do
+        app    <- getApp p
+        response <- post app "spots" $ "INVALID JSON{{{{"
+        (getStatus response) `shouldEqual` 400
 
   describe "PUT /spots/:id" $ do
     it "should update existing record" $ cleanup $ do
