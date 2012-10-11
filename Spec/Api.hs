@@ -21,10 +21,11 @@ spec p = do
 
   describe "GET /spots" $ do
     it "should contains 'ABCDE' in response body" $ cleanup $ do
-      runDB p $ P.insert $ Spot 1.2 1.3 "ABCDE"
-      app <- getApp p
-      res <- app `get` "spots"
-      getBody res `shouldContains` "ABCDE"
+      key      <- runDB p $ P.insert $ Spot 1.2 1.3 "ABCDE"
+      resource <- runDB p $ P.get key
+      app      <- getApp p
+      response <- app `get` "spots"
+      getBody response `shouldContains` (BS.concat $ LBS.toChunks $ AE.encode resource)
 
   describe "GET /spots/:id" $ do
     it "should get record" $ cleanup $ do
