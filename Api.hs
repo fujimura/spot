@@ -23,8 +23,8 @@ app p = do
         json resources
 
     get "/spots/:id" $ do
-        key      <- toKey <$> param "id"
-        resource <- db $ P.get (key :: SpotId)
+        key      <- (\x -> toKey x :: SpotId) <$> param "id"
+        resource <- db $ P.get key
         case resource of
             Just r  -> json $ r
             Nothing -> status HT.status404
