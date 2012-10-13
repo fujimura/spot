@@ -42,7 +42,7 @@ app p = do
         value    <- AE.decode <$> body
         case value of
             Just v -> do
-              key      <- db $ P.insert (fromJust value :: Spot)
+              key      <- db $ P.insert (v :: Spot)
               resource <- db $ P.get key
               json resource
             Nothing -> status HT.status400
