@@ -50,10 +50,17 @@ spec p = do
       before < after `shouldBe` True
 
     describe "with invalid JSON" $ do
+      let request = do
+          app    <- getApp p
+          post app "spots" $ "INVALID JSON{{{{"
+
       it "should return 400" $ do
-        app    <- getApp p
-        response <- post app "spots" $ "INVALID JSON{{{{"
+        response <- request
         (getStatus response) `shouldEqual` 400
+
+      it "should return invalid JSON itself" $ do
+        response <- request
+        (getBody response) `shouldContains` "\"message\":\"Invalid JSON format: INVALID JSON{{{{\""
 
   describe "PUT /spots/:id" $ do
     it "should update existing record" $ cleanup $ do

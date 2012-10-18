@@ -7,6 +7,7 @@ import           Control.Applicative     ((<$>))
 import           Control.Monad           (when)
 import qualified Data.Aeson              as AE
 import           Data.Maybe              (isNothing)
+import           Data.Monoid             (mconcat)
 import           Data.Text               ()
 import qualified Database.Persist.Sqlite as P
 import           DB
@@ -45,7 +46,10 @@ app p = do
               key      <- db $ P.insert (v :: Spot)
               resource <- db $ P.get key
               json resource
-            Nothing -> status HT.status400
+            Nothing -> do
+              status HT.status400
+              invalidJSON <- body
+              json $ AE.object ["message" AE..= mconcat ["Invalid JSON format: ", invalidJSON]]
 
     delete "/spots/:id" $ withRescue $ do
         key <- toKey <$> param "id"
