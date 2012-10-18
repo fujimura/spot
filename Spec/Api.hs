@@ -78,6 +78,20 @@ spec p = do
       response <- put app "spots/8392" $ AE.encode (Spot 1.2 1.3 "BAR")
       (getStatus response) `shouldEqual` 404
 
+    describe "with invalid JSON" $ do
+      let request = do
+          key <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
+          app <- getApp p
+          put app (BS.concat ["spots/", (encodeUtf8 $ toPathPiece key)]) $ "INVALID JSON{{{{"
+
+      it "should return 400" $ do
+        response <- request
+        (getStatus response) `shouldEqual` 400
+
+      it "should return invalid JSON itself" $ do
+        response <- request
+        (getBody response) `shouldContains` "\"message\":\"Invalid JSON format: INVALID JSON{{{{\""
+
   describe "DELETE /spots/:id" $ do
     it "should delete existing record" $ cleanup $ do
       key    <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
