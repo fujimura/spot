@@ -76,8 +76,8 @@ getApp p = liftIO $ Scotty.scottyApp $ do
               App.app
               Api.app p
 
-getBody :: WT.SResponse -> BS.ByteString
-getBody res = BS.concat . LBS.toChunks $ WT.simpleBody res
+getBody :: WT.SResponse -> LBS.ByteString
+getBody res = WT.simpleBody res
 
 getStatus :: WT.SResponse -> Int
 getStatus = HT.statusCode . WT.simpleStatus
@@ -85,8 +85,10 @@ getStatus = HT.statusCode . WT.simpleStatus
 should :: Show a => (a -> a -> Bool) -> a -> a -> Expectation
 should be actual expected = actual `be` expected `shouldBe` True
 
-shouldContains :: BS.ByteString -> BS.ByteString -> Expectation
-shouldContains subject matcher = should BS.isInfixOf matcher subject
+shouldContains :: LBS.ByteString -> LBS.ByteString -> Expectation
+shouldContains subject matcher = should contains matcher subject
+    where
+      contains m s = any (LBS.isPrefixOf m) $ LBS.tails s
 
 shouldEqual :: (Show a, Eq a) => a -> a -> Expectation
 shouldEqual = should (==)

@@ -25,7 +25,7 @@ spec p = do
       resource <- runDB p $ P.get key
       app      <- getApp p
       response <- app `get` "spots"
-      getBody response `shouldContains` (BS.concat $ LBS.toChunks $ AE.encode resource)
+      getBody response `shouldContains` (AE.encode resource)
 
   describe "GET /spots/:id" $ do
     it "should get record" $ cleanup $ do
@@ -33,7 +33,7 @@ spec p = do
       resource <- runDB p $ P.get key
       app      <- getApp p
       response <- get app (BS.concat ["spots/", (encodeUtf8 $ toPathPiece key)])
-      (BS.concat . LBS.toChunks $ AE.encode resource) `shouldEqual` (getBody response)
+      (AE.encode resource) `shouldEqual` (getBody response)
 
     it "should return 404 if resource is not found" $ cleanup $ do
       app      <- getApp p
