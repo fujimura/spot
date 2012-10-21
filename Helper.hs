@@ -14,8 +14,11 @@ import           Web.PathPieces
 import           Web.Scotty
 
 withRescue :: ActionM () -> ActionM ()
--- TODO Return proper status code
-withRescue = flip rescue text
+withRescue a = a `rescue` rescue'
+  where
+    rescue' e = case e of
+      "jsonData: no parse" -> invalidJSON
+      other                -> raise other
 
 invalidJSON :: ActionM ()
 invalidJSON = do
