@@ -45,14 +45,14 @@ spec p = do
       let resource = Spot 1.2 1.3 "ABCDE"
       app    <- getApp p
       before <- runDB p $ P.count ([] :: [P.Filter Spot])
-      res    <- post app "spots" $ AE.encode resource
+      _      <- post app "spots" $ AE.encode resource
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before < after `shouldBe` True
 
     describe "with invalid JSON" $ do
       let request = do
           app    <- getApp p
-          post app "spots" $ "INVALID JSON{{{{"
+          post app "spots" "INVALID JSON{{{{"
 
       it "should return 400" $ do
         response <- request
@@ -97,7 +97,7 @@ spec p = do
       key    <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
       app    <- getApp p
       before <- runDB p $ P.count ([] :: [P.Filter Spot])
-      _      <- delete app (BS.concat ["spots/", (encodeUtf8 $ toPathPiece key)])
+      _      <- delete app (BS.concat ["spots/", encodeUtf8 $ toPathPiece key])
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before - after `shouldBe` 1
 
