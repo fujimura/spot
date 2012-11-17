@@ -23,6 +23,7 @@ Executable spot
                       , aeson
                       , bytestring
                       , cmdargs
+                      , ghc-prim
                       , hastache
                       , http-types
                       , mtl

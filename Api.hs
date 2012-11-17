@@ -11,8 +11,8 @@ import qualified Database.Persist.Sqlite as P
 import           DB
 import           Helper
 import qualified Network.HTTP.Types      as HT
+import           Types
 import           Web.Scotty
-
 
 app :: P.ConnectionPool -> ScottyM ()
 app p = do
@@ -20,13 +20,13 @@ app p = do
 
     get "/spots" $ withRescue $ do
         resources <- db $ map P.entityVal <$> P.selectList ([] :: [P.Filter Spot]) []
-        json resources
+        json $ toSpotsResponse resources
 
     get "/spots/:id" $ do
         key      <- toKey <$> param "id"
         resource <- db $ P.get (key :: SpotId)
         case resource of
-            Just r  -> json r
+            Just r  -> json $ SpotResponse r
             Nothing -> status HT.status404
 
     put "/spots/:id" $ withRescue $ do
@@ -35,7 +35,7 @@ app p = do
         db $ P.update key $ toUpdateQuery (value :: Spot)
         resource <- db $ P.get (key :: SpotId)
         case resource of
-            Just r  -> json r
+            Just r  -> json $ SpotResponse r
             Nothing -> status HT.status404
 
     post "/spots" $ withRescue $ do

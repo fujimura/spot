@@ -13,6 +13,7 @@ import qualified Database.Persist.Sqlite as P
 import           DB
 import           Helper
 import           Spec.Helper
+import           Types
 import           Web.PathPieces
 
 spec :: P.ConnectionPool -> Spec
@@ -25,7 +26,10 @@ spec p = do
       resource <- runDB p $ P.get key
       app      <- getApp p
       response <- app `get` "spots"
-      getBody response `shouldContains` (AE.encode resource)
+      -- TODO Assert response format
+      case resource of
+        Just r -> (getBody response) `shouldContains` (AE.encode $ SpotResponse r)
+        Nothing -> error "Failed to create Spot record"
 
   describe "GET /spots/:id" $ do
     it "should get record" $ cleanup $ do
@@ -33,7 +37,9 @@ spec p = do
       resource <- runDB p $ P.get key
       app      <- getApp p
       response <- get app (BS.concat ["spots/", (encodeUtf8 $ toPathPiece key)])
-      (AE.encode resource) `shouldEqual` (getBody response)
+      case resource of
+        Just r -> (AE.encode $ SpotResponse r) `shouldEqual` (getBody response)
+        Nothing -> error "Failed to create Spot record"
 
     it "should return 404 if resource is not found" $ cleanup $ do
       app      <- getApp p
