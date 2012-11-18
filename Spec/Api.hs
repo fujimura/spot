@@ -72,7 +72,7 @@ spec p = do
     it "should update existing record" $ cleanup $ do
       key <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
       app <- getApp p
-      _   <- put app (BS.concat ["spots/", (encodeUtf8 $ toPathPiece key)]) $ AE.encode (Spot 1.2 1.3 "BAR")
+      _   <- put app (BS.concat ["spots/", (encodeUtf8 $ toPathPiece key)]) $ AE.encode $ toSpotResponse (Spot 1.2 1.3 "BAR")
       resource   <- runDB p $ P.get key
       case resource of
           Just s -> (spotBody s) `shouldEqual` "BAR"
@@ -81,7 +81,7 @@ spec p = do
     it "should return 404 if resource is not found" $ cleanup $ do
       _ <- runDB p $ P.insert (Spot 1.2 1.3 "FOO")
       app <- getApp p
-      response <- put app "spots/8392" $ AE.encode (Spot 1.2 1.3 "BAR")
+      response <- put app "spots/8392" $ AE.encode $ toSpotResponse (Spot 1.2 1.3 "BAR")
       (getStatus response) `shouldEqual` 404
 
     describe "with invalid JSON" $ do

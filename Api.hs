@@ -31,8 +31,8 @@ app p = do
 
     put "/spots/:id" $ withRescue $ do
         key   <- toKey <$> param "id"
-        value <- jsonData
-        db $ P.update key $ toUpdateQuery (value :: Spot)
+        value <- fromSpotResponse <$> jsonData
+        db $ P.update key $ toUpdateQuery value
         resource <- db $ P.get (key :: SpotId)
         case resource of
             Just r  -> json $ SpotResponse r
