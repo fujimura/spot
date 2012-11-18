@@ -51,7 +51,7 @@ spec p = do
       let resource = Spot 1.2 1.3 "ABCDE"
       app    <- getApp p
       before <- runDB p $ P.count ([] :: [P.Filter Spot])
-      _      <- post app "spots" $ AE.encode resource
+      _      <- post app "spots" $ AE.encode $ toSpotResponse resource
       after  <- runDB p $ P.count ([] :: [P.Filter Spot])
       before < after `shouldBe` True
 

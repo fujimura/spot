@@ -39,8 +39,8 @@ app p = do
             Nothing -> status HT.status404
 
     post "/spots" $ withRescue $ do
-        value    <- jsonData
-        key      <- db $ P.insert (value :: Spot)
+        value    <- fromSpotResponse <$> jsonData
+        key      <- db $ P.insert value
         resource <- db $ P.get key
         json resource
 

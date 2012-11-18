@@ -4,6 +4,7 @@ module Types
     (
       SpotResponse (SpotResponse)
     , SpotsResponse (SpotsResponse)
+    , fromSpotResponse
     , toSpotResponse
     , toSpotsResponse
     ) where
@@ -29,3 +30,6 @@ toSpotResponse = SpotResponse
 
 toSpotsResponse :: [Spot] -> SpotsResponse
 toSpotsResponse xs = SpotsResponse $ map SpotResponse xs
+
+fromSpotResponse :: SpotResponse -> Spot
+fromSpotResponse = spot
