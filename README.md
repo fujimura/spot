@@ -1,21 +1,14 @@
 # SPOT [<img src="https://secure.travis-ci.org/fujimura/spot.png"/>](http://travis-ci.org/fujimura/spot)
 
 ## What is this?
-Map with text
 
-## How to run
-
-    $ coffee -c -o static coffee/
-    $ runhaskell main.hs
-
-## Compiling CoffeeScript continuously
-
-    $ coffee -c -o static --watch coffee/
+An example web application with [scotty](https://github.com/xich/scotty), [persistent](https://github.com/yesodweb/persistent) and [hspec](https://github.com/hspec/hspec)
 
 ## Libraries
 * scotty [github](https://github.com/xich/scotty) [hackage](http://hackage.haskell.org/package/scotty)
 * hastache [github](https://github.com/lymar/hastache) [hackage](http://hackage.haskell.org/package/hastache)
 * persistent [github](https://github.com/yesodweb/persistent) [hackage](http://hackage.haskell.org/package/persistent)
+* hspec [hspec](https://github.com/hspec/hspec)
 * gmaps.js [github](https://github.com/hpneo/gmaps) [site](http://hpneo.github.com/gmaps/)
 
 ## External APIs
