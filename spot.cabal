@@ -19,6 +19,7 @@ Data-Files:             coffee/init.coffee
 Executable spot
   Main-Is:              Main.hs
   GHC-Options:          -Wall
+  hs-source-dirs:       src
   Build-Depends:        base >= 4.0 && < 5
                       , aeson
                       , bytestring
@@ -47,7 +48,9 @@ Executable spot
                         Option
 test-suite specs
   type:                exitcode-stdio-1.0
-  main-is:             Spec/Spec.hs
+  main-is:             Spec.hs
+  hs-source-dirs:      src
+                     , test
   Build-depends:       base >= 4.0 && < 5
                      , conduit             >= 0.5.2.4
                      , wai-test

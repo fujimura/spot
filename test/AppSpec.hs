@@ -1,10 +1,10 @@
 {-# LANGUAGE ExtendedDefaultRules #-}
 {-# LANGUAGE OverloadedStrings    #-}
 
-module Spec.App ( spec ) where
+module AppSpec ( spec ) where
 
 import qualified Database.Persist.Sqlite as P
-import           Spec.Helper
+import           SpecHelper
 
 spec :: P.ConnectionPool -> Spec
 spec p = do

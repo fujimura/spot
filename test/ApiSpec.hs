@@ -1,7 +1,7 @@
 {-# LANGUAGE ExtendedDefaultRules #-}
 {-# LANGUAGE OverloadedStrings    #-}
 
-module Spec.Api ( spec ) where
+module ApiSpec ( spec ) where
 
 import           Control.Exception       (finally)
 import qualified Data.Aeson              as AE
@@ -12,7 +12,7 @@ import           Data.Text.Encoding
 import qualified Database.Persist.Sqlite as P
 import           DB
 import           Helper
-import           Spec.Helper
+import           SpecHelper
 import           Types
 import           Web.PathPieces
 

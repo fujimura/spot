@@ -2,9 +2,9 @@
 {-# LANGUAGE OverloadedStrings    #-}
 
 import qualified Database.Persist.Sqlite as P
-import           Spec.Helper             (migrate)
-import qualified Spec.App
-import qualified Spec.Api
+import           SpecHelper             (migrate)
+import qualified AppSpec
+import qualified ApiSpec
 import           Test.Hspec
 
 main :: IO ()
@@ -12,5 +12,5 @@ main = do
   pool <- P.createSqlitePool ":memory:" 3
   migrate pool
   hspec $ do
-    Spec.App.spec pool
-    Spec.Api.spec pool
+    AppSpec.spec pool
+    ApiSpec.spec pool
