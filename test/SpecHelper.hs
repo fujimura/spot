@@ -14,6 +14,7 @@ module SpecHelper
   , migrate
   , shouldContains
   , shouldEqual
+  , puts
   ) where
 
 import           Control.Applicative      as X
@@ -35,6 +36,7 @@ import qualified Network.HTTP.Types       as HT
 import qualified Network.Socket.Internal  as Sock
 import qualified Network.Wai              as W
 import qualified Network.Wai.Test         as WT
+import           System.IO                (hPrint, stderr)
 import           Web.PathPieces
 import qualified Web.Scotty               as Scotty
 
@@ -92,3 +94,6 @@ shouldContains subject matcher = should contains matcher subject
 
 shouldEqual :: (Show a, Eq a) => a -> a -> Expectation
 shouldEqual = should (==)
+
+puts :: Show a => a -> IO ()
+puts = hPrint stderr . show
