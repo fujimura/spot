@@ -28,7 +28,11 @@ class App.Spot
 
   # FIXME naming
   post: ->
-    data = JSON.stringify { lat: @lat, lng: @lng, body: @body }
+    data = JSON.stringify
+      spot :
+        lat: @lat
+        lng: @lng
+        body: @body
     log = (d) -> console.log d #TODO FIXME
     $.ajax
       type     : 'POST',
