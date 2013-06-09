@@ -4,6 +4,20 @@
 
 An example web application with [scotty](https://github.com/xich/scotty), [persistent](https://github.com/yesodweb/persistent) and [hspec](https://github.com/hspec/hspec)
 
+
+## How to run
+
+    $ coffee -c -o static coffee/
+    $ cabal-dev install
+    $ cabal-dev configure && cabal-dev build
+    $ ghci
+    > Migrate.run
+    > main
+
+## Compiling CoffeeScript continuously
+
+    $ coffee -c -o static --watch coffee/
+
 ## Libraries
 * scotty [github](https://github.com/xich/scotty) [hackage](http://hackage.haskell.org/package/scotty)
 * hastache [github](https://github.com/lymar/hastache) [hackage](http://hackage.haskell.org/package/hastache)
