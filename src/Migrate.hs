@@ -1,5 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+module Migrate
+    ( run
+    ) where
+
 import           Control.Exception
 import           Control.Monad
 import qualified Data.Text               as T
@@ -10,8 +14,8 @@ import qualified Config
 import qualified Database.Persist.Sqlite as P
 import           DB
 
-main :: IO ()
-main = do
+run :: IO ()
+run = do
     d <- doesDirectoryExist "db"
     unless d $ fail "Directory ./db does not exist. Retry after creating ./db"
 

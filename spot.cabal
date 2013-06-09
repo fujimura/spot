@@ -24,6 +24,7 @@ Executable spot
                       , aeson
                       , bytestring
                       , cmdargs
+                      , directory
                       , ghc-prim
                       , hastache
                       , http-types

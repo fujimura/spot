@@ -6,6 +6,7 @@
 import qualified App
 import qualified Api
 import qualified Config
+import qualified Migrate
 import qualified Data.Text                            as T
 import qualified Database.Persist.Sqlite              as P
 import           Network.Wai.Middleware.RequestLogger
